@@ -179,3 +179,7 @@ HOST_MINIO_CONSOLE_PORT=$(findAvailablePortExclude "$DEFAULT_MINIO_CONSOLE_PORT"
 
 
 kind create cluster --config ./kind-flux-config.yaml
+source ./export_token.sh
+kubectl create namespace minio
+kubectl create namespace oscar
+flux bootstrap github --owner=desustanciao --repository=fleet-infra --branch=main --path=./clusters/my-cluster --personal
