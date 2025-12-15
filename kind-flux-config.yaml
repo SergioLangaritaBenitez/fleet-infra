@@ -23,6 +23,25 @@ kubeadmConfigPatchesJSON6902:
 nodes:
 # the control plane node config
 - role: control-plane
+    kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  - containerPort: 80
+    hostPort: ${HOST_HTTP_PORT}
+    protocol: TCP
+  - containerPort: 443
+    hostPort: ${HOST_HTTPS_PORT}
+    protocol: TCP
+  - containerPort: ${HOST_MINIO_API_PORT}
+    hostPort: ${HOST_MINIO_API_PORT}
+    protocol: TCP
+  - containerPort: ${HOST_MINIO_CONSOLE_PORT}
+    hostPort: ${HOST_MINIO_CONSOLE_PORT}
+    protocol: TCP
 # the three workers
 - role: worker
 - role: worker
