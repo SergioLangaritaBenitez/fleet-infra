@@ -6,7 +6,6 @@ metadata:
   namespace: oscar
 spec:
   interval: 10m
-  targetNamespace: oscar
   sourceRef:
     kind: GitRepository
     name: oscar
