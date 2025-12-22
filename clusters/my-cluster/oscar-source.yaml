@@ -5,7 +5,6 @@ metadata:
   name: oscar
   namespace: oscar
 spec:
-  name: oscar
   interval: 5m0s
   url: https://github.com/grycap/oscar
   ref:
