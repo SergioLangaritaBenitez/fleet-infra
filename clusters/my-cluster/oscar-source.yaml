@@ -1,0 +1,12 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: oscar
+  namespace: oscar
+spec:
+  name: oscar
+  interval: 5m0s
+  url: https://github.com/grycap/oscar
+  ref:
+    branch: devel
