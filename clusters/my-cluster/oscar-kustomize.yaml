@@ -15,6 +15,8 @@ spec:
   values:
       minIO:
         TLSVerify: false
+        accessKey: minio
+        secretKey: minio123
       volume:
         storageClassName: nfs
       authUser: oscar
