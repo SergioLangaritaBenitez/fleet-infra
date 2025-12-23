@@ -12,22 +12,22 @@ spec:
   path: "./deploy/yaml"
   prune: true
   timeout: 1m
-  patches:
-    - patch: |-
-      apiVersion: apps/v1
-      kind: Deployment
-      metadata:
-        name: oscar
-      spec:
-        values:
-          minIO:
-            TLSVerify: false
-            accessKey: minio
-            secretKey: minio123
-          volume:
-            storageClassName: nfs
-          authUser: oscar
-          authPass: oscar123
-          service:
-            type: NodePort
-            nodePort: 30302
+patches:
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: oscar
+    spec:
+      values:
+        minIO:
+          TLSVerify: false
+          accessKey: minio
+          secretKey: minio123
+        volume:
+          storageClassName: nfs
+        authUser: oscar
+        authPass: oscar123
+        service:
+          type: NodePort
+          nodePort: 30302
