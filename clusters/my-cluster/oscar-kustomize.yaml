@@ -13,7 +13,6 @@ spec:
   prune: true
   timeout: 1m
   values:
-      minIO.TLSVerify: false
       authUser: oscar
       authPass: oscar123
       service:
