@@ -13,7 +13,7 @@ spec:
   prune: true
   timeout: 1m
 patches:
-- patch: |-
+  - patch: |-
     apiVersion: apps/v1
     kind: Deployment
     metadata:
