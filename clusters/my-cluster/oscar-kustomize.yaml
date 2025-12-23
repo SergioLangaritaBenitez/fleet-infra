@@ -15,3 +15,6 @@ spec:
   values:
       authUser: oscar
       authPass: oscar123
+      service:
+        type: NodePort
+        nodePort: 30302
