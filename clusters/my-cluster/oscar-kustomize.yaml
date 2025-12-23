@@ -13,6 +13,10 @@ spec:
   prune: true
   timeout: 1m
   values:
+      minIO:
+        TLSVerify: false
+      volume:
+        storageClassName: nfs
       authUser: oscar
       authPass: oscar123
       service:
