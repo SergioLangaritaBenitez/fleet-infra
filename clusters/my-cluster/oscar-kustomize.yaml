@@ -12,3 +12,9 @@ spec:
   path: "./deploy/yaml"
   prune: true
   timeout: 1m
+  values:
+      service:
+        type: NodePort
+        nodePort: 8080
+      authUser: oscar
+      authPass: oscar123
