@@ -182,4 +182,5 @@ kind create cluster --config ./kind-flux-config.yaml
 source ./export_token.sh
 kubectl create namespace minio
 kubectl create namespace oscar
+kubectl create namespace ingress-nginx
 flux bootstrap github --owner=desustanciao --repository=fleet-infra --branch=main --path=./clusters/my-cluster --personal
