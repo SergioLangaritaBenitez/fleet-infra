@@ -18,11 +18,8 @@ spec:
         kind: Deployment
         metadata:
           name: oscar
+          namespace: oscar
         spec:
           env:
           - name: MINIO_ENDPOINT
             value: http://10.244.3.2:9000     
-    target:
-      kind: Deployment
-      name: oscar
-      namespace: oscar
