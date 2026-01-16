@@ -9,7 +9,7 @@ spec:
   sourceRef:
     kind: OCIRepository
     name: oscar
-  path: "./"  
+  path: "./pkg"
   prune: true
   timeout: 1m
 patches:
