@@ -9,6 +9,6 @@ spec:
   sourceRef:
     kind: OCIRepository
     name: oscar
-  path: "./pkg"
+  path: "./"
   prune: true
   timeout: 1m
