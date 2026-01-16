@@ -9,6 +9,5 @@ spec:
   sourceRef:
     kind: OCIRepository
     name: oscar
-  path: "./deploy/yaml"
   prune: true
   timeout: 1m
