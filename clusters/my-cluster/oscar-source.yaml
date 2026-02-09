@@ -1,11 +1,11 @@
 ---
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: OCIRepository
+kind: GitRepository
 metadata:
   name: oscar
   namespace: oscar
 spec:
   interval: 5m0s
-  url: oci://ghcr.io/grycap/oscar
+  url: https://github.com/desustanciao/oscar
   ref:
-    tag: devel
+    branch: devel
