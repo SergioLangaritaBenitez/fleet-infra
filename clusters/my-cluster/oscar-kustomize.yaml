@@ -12,38 +12,38 @@ spec:
   path: "./"
   prune: true
   timeout: 1m
-patches:
-  - path: oscar-patches/oscar-deployment.yaml
-    target:
-      kind: Deployment
-      name: oscar
-      namespace: oscar
-  - path: oscar-patches/oscar-ingress.yaml
-    target:
-      kind: Ingress
-      name: oscar
-      namespace: oscar
-  - path: oscar-patches/oscar-namespaces.yaml
-    target:
-      kind: Namespace
-      name: oscar
-      namespace: oscar
-  - path: oscar-patches/oscar-rbac.yaml
-    target:
-      name: oscar
-      namespace: oscar
-  - path: oscar-patches/oscar-service.yaml
-    target:
-      kind: Service
-      name: oscar
-      namespace: oscar
-  - path: oscar-patches/oscar-volume.yaml
-    target:
-      kind: PersistentVolumeClaim
-      name: oscar
-      namespace: oscar
-  - path: oscar-patches/populate-oscar-volume.yaml
-    target:
-      kind: Job
-      name: oscar
-      namespace: oscar
+  patches:
+    - path: oscar-patches/oscar-deployment.yaml
+      target:
+        kind: Deployment
+        name: oscar
+        namespace: oscar
+    - path: oscar-patches/oscar-ingress.yaml
+      target:
+        kind: Ingress
+        name: oscar
+        namespace: oscar
+    - path: oscar-patches/oscar-namespaces.yaml
+      target:
+        kind: Namespace
+        name: oscar
+        namespace: oscar
+    - path: oscar-patches/oscar-rbac.yaml
+      target:
+        name: oscar
+        namespace: oscar
+    - path: oscar-patches/oscar-service.yaml
+      target:
+        kind: Service
+        name: oscar
+        namespace: oscar
+    - path: oscar-patches/oscar-volume.yaml
+      target:
+        kind: PersistentVolumeClaim
+        name: oscar
+        namespace: oscar
+    - path: oscar-patches/populate-oscar-volume.yaml
+      target:
+        kind: Job
+        name: oscar
+        namespace: oscar
