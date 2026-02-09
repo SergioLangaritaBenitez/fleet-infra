@@ -45,7 +45,7 @@ spec:
         - name: MINIO_TLS_VERIFY
           value: "false"
         - name: MINIO_ENDPOINT
-          value: http://10.244.3.2:9000
+          value: http://minio.minio:9000
         ports:
         - name: http
           containerPort: 8080
