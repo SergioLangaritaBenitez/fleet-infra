@@ -1,0 +1,21 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nfs-ganesha-connectivity-test
+  namespace: default
+spec:
+  backoffLimit: 3
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: connectivity-check
+          image: curlimages/curl:8.2.1
+          command:
+            - /bin/sh
+            - -c
+            - |
+              echo "Testing Helm repo connectivity..."
+              nslookup kubernetes-sigs.github.io || exit 1
+              curl -sSf https://kubernetes-sigs.github.io/nfs-ganesha-server-and-external-provisioner/ || exit 1
+              echo "Connectivity test succeeded!"
