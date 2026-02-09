@@ -1,13 +1,13 @@
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: GitRepository
+kind: Kustomization
 metadata:
   name: oscar
   namespace: oscar
 spec:
   interval: 10m
   sourceRef:
-    kind: OCIRepository
+    kind: GitRepository
     name: oscar
   path: "./deploy/yaml"
   prune: true
