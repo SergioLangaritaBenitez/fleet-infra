@@ -180,4 +180,4 @@ HOST_MINIO_CONSOLE_PORT=$(findAvailablePortExclude "$DEFAULT_MINIO_CONSOLE_PORT"
 
 kind create cluster --config ./kind-flux-config.yaml
 source ./export_token.sh
-flux bootstrap github --owner=desustanciao --repository=fleet-infra --branch=main --path=./oscar/environment/devel --personal
+flux bootstrap github --owner=desustanciao --repository=fleet-infra --branch=main --path=./oscar/environment/devel --personal --components-extra source-watcher image-reflector-controller,image-automation-controller
