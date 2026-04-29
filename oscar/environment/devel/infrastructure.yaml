@@ -31,4 +31,3 @@ spec:
     name: infrastructure
   path: ./storage
   prune: true
-  wait: true
