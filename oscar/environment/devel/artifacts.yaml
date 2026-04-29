@@ -8,7 +8,7 @@ spec:
   sources:
     - alias: monorepo
       kind: GitRepository
-      name: flux-system
+      name: oscar
   artifacts:
     - name: infrastructure
       originRevision: "@monorepo"
