@@ -5,6 +5,8 @@ metadata:
   name: apps-devel
   namespace: flux-system
 spec:
+  dependsOn:
+    - name: storage
   interval: 10m
   sourceRef:
     kind: GitRepository
