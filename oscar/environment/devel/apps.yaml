@@ -2,17 +2,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: apps
+  name: apps-devel
   namespace: flux-system
 spec:
   dependsOn:
-    - name: infra-configs
-  interval: 1h
-  retryInterval: 2m
-  timeout: 5m
+    - name: apps-base
+  interval: 10m
   sourceRef:
-    kind: ExternalArtifact
-    name: apps
-  path: ./devel
+    kind: GitRepository
+    name: flux-system
+  path: ./oscar/apps/devel
   prune: true
   wait: true
