@@ -8,17 +8,17 @@ spec:
   sources:
     - alias: monorepo
       kind: GitRepository
-      name: oscar
+      name: flux-system
   artifacts:
     - name: infrastructure
       originRevision: "@monorepo"
       copy:
-        - from: "@monorepo/infrastructure/**"
+        - from: "@monorepo/oscar/infrastructure/**"
           to: "@artifact/"
     - name: apps
       originRevision: "@monorepo"
       copy:
-        - from: "@monorepo/apps/base/**"
+        - from: "@monorepo/oscar/apps/base/**"
           to: "@artifact/base/"
-        - from: "@monorepo/apps/devel/**"
+        - from: "@monorepo/oscar/apps/devel/**"
           to: "@artifact/devel/"
