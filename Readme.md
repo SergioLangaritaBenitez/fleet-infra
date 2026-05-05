@@ -95,7 +95,7 @@ Al crear un repositorio nuevo, puedes especificar una lista de equipos de GitHub
 
 ## Instalando OSCAR
 
-Para instalar OSCAR con todos sus componentes necesarios, duplica la carpeta oscar de este repositorio, el path del bootstrap debe establecerse en `\oscar\environment\devel`
+Para instalar OSCAR con todos sus componentes necesarios, duplica la carpeta oscar de este repositorio, el path del bootstrap debe establecerse en `.\oscar\environment\devel`
 
 Si solo se quiere instalar OSCAR sin sus dependencias, solo será necesario copiar la carpeta `apps` y de la carpeta `environmnet` el archivo `apps.yaml`, asi como remover la entrada `dependsOn` dentro de las spec
 
@@ -106,7 +106,7 @@ Ademas dentro de `apps` se deberá actualizar la url del archivo base/source par
 Comprueba que los pods de Flux estén en ejecución:
 
 ```bash
-kubectl get pods -n flux-system
+kubectl get pods -n oscar
 ```
 
 Verifica el estado:
@@ -122,29 +122,11 @@ flux get all
 Después del bootstrap, el repositorio tendrá una estructura similar a:
 
 ```
-clusters/
-  my-cluster/
-    flux-system/
+oscar/
+  environment/
+    devel/
+      flux-system/
 ```
-
-Aquí puedes añadir manifiestos Kubernetes para que Flux los sincronice automáticamente.
-
----
-
-## Despliegue de aplicaciones
-
-1. Añade manifiestos YAML al repositorio
-2. Haz commit y push
-3. Flux aplicará los cambios automáticamente al clúster
-
-Ejemplo:
-
-```bash
-git add .
-git commit -m "Add app"
-git push
-```
-
 ---
 
 ## Buenas prácticas
@@ -161,7 +143,7 @@ git push
 Ver logs:
 
 ```bash
-kubectl logs -n flux-system deployment/source-controller
+kubectl logs -n oscar deployment/source-controller
 ```
 
 Reconcilia manualmente:
