@@ -99,6 +99,8 @@ Para instalar OSCAR con todos sus componentes necesarios, duplica la carpeta osc
 
 Si solo se quiere instalar OSCAR sin sus dependencias, solo será necesario copiar la carpeta `apps` y de la carpeta `environmnet` el archivo `apps.yaml`, asi como remover la entrada `dependsOn` dentro de las spec
 
+Ademas dentro de `apps` se deberá actualizar la url del archivo base/source para apuntar al repositorio de oscar deseado i.e: `url: https://github.com/grycap/oscar`
+
 ## Verificación
 
 Comprueba que los pods de Flux estén en ejecución:
