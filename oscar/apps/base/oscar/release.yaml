@@ -12,3 +12,18 @@ spec:
   path: "./deploy/yaml"
   prune: true
   timeout: 1m
+  patches:
+    - patch: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: oscar
+        spec:
+          template:
+            spec:
+              containers:
+                - name: oscar
+                  image: ghcr.io/grycap/oscar:4.0.0 # {"$imagepolicy": "flux-system:oscar"}
+      target:
+        kind: Deployment
+        name: oscar
