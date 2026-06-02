@@ -1,0 +1,35 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: traefik
+  namespace: traefik
+  labels:
+    reconcile.fluxcd.io/watch: Enabled
+spec:
+  chart:
+    spec:
+      chart: traefik
+      sourceRef:
+        kind: HelmRepository
+        name: traefik
+      interval: 5m
+  releaseName: traefik
+  interval: 10m
+  values:
+    service:
+      type: NodePort
+    ports:
+      web:
+        nodePort: 30000
+      websecure:
+        nodePort: 30043
+    providers:
+      kubernetesGateway:
+        enabled: true
+      kubernetesIngress:
+        enabled: false
+    # We declare our own GatewayClass/Gateway (gateway.yaml) instead of
+    # letting the chart create them, to keep full control over listener config.
+    gateway:
+      enabled: false
