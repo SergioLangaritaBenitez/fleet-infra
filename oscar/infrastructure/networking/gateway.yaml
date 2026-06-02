@@ -1,13 +1,6 @@
 ---
-# GatewayClass tells Traefik it is the implementation for this class.
-apiVersion: gateway.networking.k8s.io/v1
-kind: GatewayClass
-metadata:
-  name: traefik
-spec:
-  controllerName: traefik.io/gateway-controller
----
 # Gateway defines the actual listeners.
+# The GatewayClass is created and owned by the Traefik Helm chart.
 # HTTPRoutes in any namespace can bind to it via parentRefs.
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
