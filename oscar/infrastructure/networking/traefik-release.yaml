@@ -29,7 +29,5 @@ spec:
         enabled: true
       kubernetesIngress:
         enabled: false
-    # We declare our own GatewayClass/Gateway (gateway.yaml) instead of
-    # letting the chart create them, to keep full control over listener config.
     gateway:
-      enabled: false
+      enabled: true
