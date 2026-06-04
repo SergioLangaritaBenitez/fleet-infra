@@ -7,6 +7,7 @@ metadata:
 spec:
   dependsOn:
     - name: storage
+    - name: serverless
   interval: 10m
   sourceRef:
     kind: GitRepository

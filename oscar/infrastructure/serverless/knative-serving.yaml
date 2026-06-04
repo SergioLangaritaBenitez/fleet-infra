@@ -1,0 +1,16 @@
+---
+# KnativeServing CR — the operator reads this and installs Knative Serving + Kourier.
+# The spec.version must be compatible with the vendored operator release (knative-v1.22.2).
+apiVersion: operator.knative.dev/v1beta1
+kind: KnativeServing
+metadata:
+  name: knative-serving
+  namespace: knative-serving
+spec:
+  version: "1.22.2"
+  ingress:
+    kourier:
+      enabled: true
+  config:
+    network:
+      ingress-class: "kourier.ingress.networking.knative.dev"

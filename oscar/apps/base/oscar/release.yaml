@@ -24,6 +24,9 @@ spec:
               containers:
                 - name: oscar
                   image: ghcr.io/grycap/oscar:4.0.0 # {"$imagepolicy": "flux-system:oscar"}
+                  env:
+                    - name: SERVERLESS_BACKEND
+                      value: "knative"
       target:
         kind: Deployment
         name: oscar
