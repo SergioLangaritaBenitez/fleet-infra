@@ -13,6 +13,9 @@ spec:
   path: "./deploy/yaml"
   prune: true
   timeout: 1m
+  postBuild:
+    substitute:
+      OSCAR_IMAGE: "ghcr.io/grycap/oscar:4.0.0" # {"$imagepolicy": "flux-system:oscar"}
   patches:
     - patch: |-
         apiVersion: apps/v1
@@ -24,7 +27,7 @@ spec:
             spec:
               containers:
                 - name: oscar
-                  image: ghcr.io/grycap/oscar:4.0.0 # {"$imagepolicy": "flux-system:oscar"}
+                  image: ${OSCAR_IMAGE}
                   env:
                     - name: SERVERLESS_BACKEND
                       value: "knative"
