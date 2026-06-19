@@ -3,7 +3,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: oscar
-  namespace: oscar
+  namespace: flux-system
 spec:
   interval: 5m0s
   url: https://github.com/desustanciao/oscar
