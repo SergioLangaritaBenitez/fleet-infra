@@ -17,7 +17,7 @@ spec:
       author:
         email: fluxcdbot@users.noreply.github.com
         name: fluxcdbot
-      messageTemplate: "chore: update oscar image to {{range .Updated.Images}}{{.}}{{end}}"
+      messageTemplate: "chore: update oscar image {{range $_, $changes := .Changed.Objects}}{{range $_, $change := $changes}}to {{$change.NewValue}} {{end}}{{end}}"
     push:
       branch: main
   update:
