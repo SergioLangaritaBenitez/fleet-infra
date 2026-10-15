@@ -15,6 +15,9 @@ spec:
   postBuild:
     substitute:
       OSCAR_IMAGE: "ghcr.io/grycap/oscar:4.2.0" # {"$imagepolicy": "flux-system:oscar"}
+    substituteFrom:
+      - kind: Secret
+        name: gateway-tls-config
   patches:
     - patch: |-
         apiVersion: apps/v1
@@ -51,9 +54,11 @@ spec:
       target:
         kind: Deployment
         name: oscar
-    # App config from Secret/oscar-config (ns oscar, outside Git).
-    # This pins the values so upstream defaults can no longer reset them.
-    # See secrets/README.md and secrets/create-cluster-secrets.example.sh.
+    # App config pinned here so upstream defaults can no longer reset it.
+    # Hostname comes per cluster from Secret/gateway-tls-config.
+    # NOTE: the live Deployment is co-owned by the original Helm release;
+    # server-side apply only stays conflict-free while these literals match
+    # the live values. See secrets/README.md.
     - patch: |-
         apiVersion: apps/v1
         kind: Deployment
@@ -65,30 +70,12 @@ spec:
               containers:
                 - name: oscar
                   env:
-                    - name: OSCAR_USERNAME
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: OSCAR_USERNAME}
-                    - name: OSCAR_PASSWORD
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: OSCAR_PASSWORD}
-                    - name: MINIO_ACCESS_KEY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_ACCESS_KEY}
-                    - name: MINIO_SECRET_KEY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_SECRET_KEY}
-                    - name: MINIO_TLS_VERIFY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_TLS_VERIFY}
-                    - name: MINIO_ENDPOINT
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_ENDPOINT}
+                    - {name: OSCAR_USERNAME, value: oscar}
+                    - {name: OSCAR_PASSWORD, value: oscar123}
+                    - {name: MINIO_ACCESS_KEY, value: minio}
+                    - {name: MINIO_SECRET_KEY, value: minio123}
+                    - {name: MINIO_TLS_VERIFY, value: "false"}
+                    - {name: MINIO_ENDPOINT, value: https://storage.${GATEWAY_HOST_BASE}}
       target:
         kind: Deployment
         name: oscar
