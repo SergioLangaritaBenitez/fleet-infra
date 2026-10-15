@@ -33,9 +33,9 @@ spec:
       target:
         kind: Deployment
         name: oscar
-    # El deploy live solo define requests (500m/512Mi); upstream añade
-    # limits inferiores (250m/256Mi) y el API lo rechaza
-    # (requests debe ser <= limits). Se eliminan los limits.
+    # The live deploy only sets requests (500m/512Mi); upstream adds
+    # lower limits (250m/256Mi) and the API rejects it
+    # (requests must be <= limits). Limits are removed.
     - patch: |-
         apiVersion: apps/v1
         kind: Deployment
@@ -51,8 +51,8 @@ spec:
       target:
         kind: Deployment
         name: oscar
-    # El PVC oscar-pvc ya existe en el clúster (Bound, managed-nfs-storage)
-    # y storageClassName es inmutable: hay que pedir la misma que tiene.
+    # PVC oscar-pvc already exists in the cluster (Bound, managed-nfs-storage)
+    # and storageClassName is immutable: request the one it already has.
     - patch: |-
         apiVersion: v1
         kind: PersistentVolumeClaim

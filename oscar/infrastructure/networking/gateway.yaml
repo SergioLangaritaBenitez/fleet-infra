@@ -16,13 +16,13 @@ spec:
       allowedRoutes:
         namespaces:
           from: All
-    # Termina TLS con los certificados de cada clúster (gestionados por
-    # cert-manager, fuera de Flux) y sirve las mismas HTTPRoutes por HTTPS.
-    # Los nombres varían por clúster: se inyectan vía postBuild substitute
-    # desde el Secret/gateway-tls-config (ns flux-system). Ver secrets/README.md.
-    # NOTA: este Traefik solo procesa el PRIMER certificateRef de cada
-    # listener, así que se usan dos listeners (mismo puerto, distinto
-    # hostname), uno por certificado.
+    # Terminates TLS with each cluster's certificates (managed by
+    # cert-manager, outside Flux) and serves the same HTTPRoutes over HTTPS.
+    # Names vary per cluster: injected via postBuild substitute
+    # from Secret/gateway-tls-config (ns flux-system). See secrets/README.md.
+    # NOTE: this Traefik only processes the FIRST certificateRef of each
+    # listener, so two listeners are used (same port, different
+    # hostname), one per certificate.
     - name: websecure-apex
       protocol: HTTPS
       port: 8443

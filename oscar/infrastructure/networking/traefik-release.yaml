@@ -21,8 +21,8 @@ spec:
     service:
       type: NodePort
     ports:
-      # NodePorts 80/443: la IP pública entra por :80/:443 (NAT).
-      # El apiserver admite el rango 80-35000 (--service-node-port-range).
+      # NodePorts 80/443: the public IP enters via :80/:443 (NAT).
+      # The apiserver allows the 80-35000 range (--service-node-port-range).
       web:
         nodePort: 80
       websecure:

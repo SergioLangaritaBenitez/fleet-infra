@@ -1,63 +1,63 @@
 Folder to store the secret values for the cluster needs.
 
-> Los ficheros con valores reales (`*.yaml`, `*.env`) están gitignored.
-> Solo este README se commitea. Nunca subas credenciales a Git.
+> Files with real values (`*.yaml`, `*.env`) are gitignored.
+> Only this README is committed. Never push credentials to Git.
 
 ## MinIO (namespace `minio`)
 
-Las credenciales root las lee el chart desde el `Secret/minio-root-credentials`
-(`.data.rootUser` + `.data.rootPassword`), referenciado con
-`existingSecret: minio-root-credentials` en
+The chart reads the root credentials from `Secret/minio-root-credentials`
+(`.data.rootUser` + `.data.rootPassword`), referenced with
+`existingSecret: minio-root-credentials` in
 `oscar/infrastructure/storage/minio/minio-release.yaml`.
-Flux no gestiona ese Secret: existe en el clúster y hay que
-mantenerlo fuera de Git.
+Flux does not manage that Secret: it lives in the cluster and must be
+kept out of Git.
 
-> Importante: el nombre debe ser distinto de `minio`, porque el
-> `Secret/minio` lo crea el propio chart y Helm lo elimina en cada
-> `upgrade` cuando deja de estar en los manifiestos renderizados.
+> Important: the name must differ from `minio`, because the
+> `Secret/minio` is created by the chart itself and Helm deletes it on
+> every `upgrade` once it stops being rendered.
 
-Ver valores actuales (solo lectura):
+Show current values (read-only):
 
 ```bash
 ssh my_cluster "sudo kubectl -n minio get secret minio-root-credentials -o jsonpath='{.data}'"
 ```
 
-Rotar credenciales:
+Rotate credentials:
 
 ```bash
 ssh my_cluster "sudo kubectl -n minio create secret generic minio-root-credentials \
-  --from-literal=rootUser=<nuevo-usuario> \
-  --from-literal=rootPassword=<nueva-password> \
+  --from-literal=rootUser=<new-user> \
+  --from-literal=rootPassword=<new-password> \
   --dry-run=client -o yaml | sudo kubectl apply -f -"
-sudo kubectl -n minio rollout restart deploy/minio  # si aplica
+sudo kubectl -n minio rollout restart deploy/minio  # if needed
 ```
 
-Si el Secret no existe, el `HelmRelease/minio` falla: créalo con el
-comando anterior antes del primer reconcile.
+If the Secret does not exist, `HelmRelease/minio` fails: create it with
+the command above before the first reconcile.
 
-## Gateway TLS por clúster (namespace `flux-system`)
+## Per-cluster gateway TLS (namespace `flux-system`)
 
-Los hostnames y los nombres de los Secrets con los certificados TLS
-varían en cada clúster, así que `oscar/infrastructure/networking/gateway.yaml`
-usa variables (`${GATEWAY_HOST_APEX}`, `${GATEWAY_HOST_BASE}`,
-`${GATEWAY_TLS_APEX}`, `${GATEWAY_TLS_WILDCARD}`) que Flux sustituye
-desde el `Secret/gateway-tls-config` (vía `postBuild.substituteFrom`
-en `oscar/environment/devel/networking.yaml`).
+Hostnames and TLS Secret names vary per cluster, so
+`oscar/infrastructure/networking/gateway.yaml` uses variables
+(`${GATEWAY_HOST_APEX}`, `${GATEWAY_HOST_BASE}`,
+`${GATEWAY_TLS_APEX}`, `${GATEWAY_TLS_WILDCARD}`) that Flux substitutes
+from `Secret/gateway-tls-config` (via `postBuild.substituteFrom`
+in `oscar/environment/devel/networking.yaml`).
 
-Crear por clúster (ejemplo con los nombres de `my_cluster`):
+Create per cluster (example):
 
 ```bash
 ssh my_cluster "sudo kubectl -n flux-system create secret generic gateway-tls-config \
-  --from-literal=GATEWAY_HOST_APEX=mystifying-lederberg8.im.grycap.net \
-  --from-literal=GATEWAY_HOST_BASE=mystifying-lederberg8.im.grycap.net \
-  --from-literal=GATEWAY_TLS_APEX=mystifying-lederberg8.im.grycap.net-tls \
-  --from-literal=GATEWAY_TLS_WILDCARD=wildcard-mystifying-lederberg8.im.grycap.net-tls \
+  --from-literal=GATEWAY_HOST_APEX=<oscar-dns> \
+  --from-literal=GATEWAY_HOST_BASE=<oscar-dns> \
+  --from-literal=GATEWAY_TLS_APEX=<oscar-dns>-tls \
+  --from-literal=GATEWAY_TLS_WILDCARD=wildcard-<oscar-dns>-tls \
   --dry-run=client -o yaml | sudo kubectl apply -f -"
 ```
 
-Los Secrets TLS referenciados deben existir en el namespace del
-Gateway (`traefik`): normalmente los crea cert-manager con objetos
-`Certificate` (también fuera de Git, uno por clúster).
+The referenced TLS Secrets must exist in the Gateway namespace
+(`traefik`): usually created by cert-manager with `Certificate`
+objects (also outside Git, one per cluster).
 
-Si el Secret `gateway-tls-config` no existe, el
-`Kustomization/networking` falla con variable indefinida (fail-fast).
+If `Secret/gateway-tls-config` is missing,
+`Kustomization/networking` fails with an undefined variable (fail-fast).
