@@ -55,10 +55,9 @@ spec:
         kind: Deployment
         name: oscar
     # App config pinned here so upstream defaults can no longer reset it.
-    # Hostname comes per cluster from Secret/gateway-tls-config.
-    # NOTE: the live Deployment is co-owned by the original Helm release;
-    # server-side apply only stays conflict-free while these literals match
-    # the live values. See secrets/README.md.
+    # Values come from Secret/oscar-config (ns oscar, outside Git):
+    # the live Deployment was re-owned to Flux (see secrets/README.md),
+    # so server-side apply stays conflict-free.
     - patch: |-
         apiVersion: apps/v1
         kind: Deployment
@@ -71,17 +70,29 @@ spec:
                 - name: oscar
                   env:
                     - name: OSCAR_USERNAME
-                      value: oscar
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: OSCAR_USERNAME}
                     - name: OSCAR_PASSWORD
-                      value: oscar123
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: OSCAR_PASSWORD}
                     - name: MINIO_ACCESS_KEY
-                      value: minio
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_ACCESS_KEY}
                     - name: MINIO_SECRET_KEY
-                      value: minio123
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_SECRET_KEY}
                     - name: MINIO_TLS_VERIFY
-                      value: "false"
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_TLS_VERIFY}
                     - name: MINIO_ENDPOINT
-                      value: https://storage.${GATEWAY_HOST_BASE}
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_ENDPOINT}
       target:
         kind: Deployment
         name: oscar
