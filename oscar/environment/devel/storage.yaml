@@ -16,3 +16,8 @@ spec:
   path: ./oscar/infrastructure/storage
   prune: true
   wait: true
+  # Per-cluster hostnames (see secrets/README.md).
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: gateway-tls-config

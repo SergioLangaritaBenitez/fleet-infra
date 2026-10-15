@@ -38,11 +38,12 @@ the command above before the first reconcile.
 ## Per-cluster gateway TLS (namespace `flux-system`)
 
 Hostnames and TLS Secret names vary per cluster, so
-`oscar/infrastructure/networking/gateway.yaml` uses variables
+`oscar/infrastructure/networking/gateway.yaml` and
+`oscar/infrastructure/storage/minio/minio-release.yaml` use variables
 (`${GATEWAY_HOST_APEX}`, `${GATEWAY_HOST_BASE}`,
 `${GATEWAY_TLS_APEX}`, `${GATEWAY_TLS_WILDCARD}`) that Flux substitutes
 from `Secret/gateway-tls-config` (via `postBuild.substituteFrom`
-in `oscar/environment/devel/networking.yaml`).
+in `oscar/environment/devel/networking.yaml` and `storage.yaml`).
 
 Create per cluster (example):
 
