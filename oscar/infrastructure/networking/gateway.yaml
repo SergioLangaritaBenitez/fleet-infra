@@ -18,13 +18,27 @@ spec:
           from: All
     # Termina TLS con los certificados Let's Encrypt (gestionados por
     # cert-manager, fuera de Flux) y sirve las mismas HTTPRoutes por HTTPS.
-    - name: websecure
+    # NOTA: este Traefik solo procesa el PRIMER certificateRef de cada
+    # listener, así que se usan dos listeners (mismo puerto, distinto
+    # hostname), uno por certificado.
+    - name: websecure-apex
       protocol: HTTPS
       port: 8443
+      hostname: mystifying-lederberg8.im.grycap.net
       tls:
         mode: Terminate
         certificateRefs:
           - name: mystifying-lederberg8.im.grycap.net-tls
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: websecure-wildcard
+      protocol: HTTPS
+      port: 8443
+      hostname: "*.mystifying-lederberg8.im.grycap.net"
+      tls:
+        mode: Terminate
+        certificateRefs:
           - name: wildcard-mystifying-lederberg8.im.grycap.net-tls
       allowedRoutes:
         namespaces:
