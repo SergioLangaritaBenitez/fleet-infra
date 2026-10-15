@@ -20,7 +20,7 @@ spec:
     # cert-manager, fuera de Flux) y sirve las mismas HTTPRoutes por HTTPS.
     - name: websecure
       protocol: HTTPS
-      port: 443
+      port: 8443
       tls:
         mode: Terminate
         certificateRefs:
