@@ -32,8 +32,9 @@ spec:
     persistence:
         enabled: false
     mode: standalone
-    rootUser: minio
-    rootPassword: minio123
+    # Credenciales gestionadas fuera de Git via Secret/minio (ns minio).
+    # Ver secrets/README.md para rotación.
+    existingSecret: minio
     service:
         type: NodePort
         nodePort: 30300

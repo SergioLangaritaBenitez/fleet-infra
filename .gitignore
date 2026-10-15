@@ -1,1 +1,6 @@
 export_token.sh
+github_token
+# Valores reales de secretos (ver secrets/README.md). No commitear credenciales.
+secrets/*.yaml
+secrets/*.env
+!secrets/README.md
