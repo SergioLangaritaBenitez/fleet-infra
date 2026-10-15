@@ -33,3 +33,15 @@ spec:
       target:
         kind: Deployment
         name: oscar
+    # El PVC oscar-pvc ya existe en el clúster (Bound, managed-nfs-storage)
+    # y storageClassName es inmutable: hay que pedir la misma que tiene.
+    - patch: |-
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+          name: oscar-pvc
+        spec:
+          storageClassName: managed-nfs-storage
+      target:
+        kind: PersistentVolumeClaim
+        name: oscar-pvc
