@@ -51,6 +51,41 @@ spec:
       target:
         kind: Deployment
         name: oscar
+    # App config from Secret/oscar-config (ns oscar, outside Git).
+    # This pins the values so upstream defaults can no longer reset them.
+    # See secrets/README.md and secrets/create-cluster-secrets.example.sh.
+    - patch: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: oscar
+        spec:
+          template:
+            spec:
+              containers:
+                - name: oscar
+                  env:
+                    - name: OSCAR_USERNAME
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: OSCAR_USERNAME}
+                    - name: OSCAR_PASSWORD
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: OSCAR_PASSWORD}
+                    - name: MINIO_ACCESS_KEY
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_ACCESS_KEY}
+                    - name: MINIO_SECRET_KEY
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_SECRET_KEY}
+                    - name: MINIO_TLS_VERIFY
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_TLS_VERIFY}
+                    - name: MINIO_ENDPOINT
+                      valueFrom:
+                        secretKeyRef: {name: oscar-config, key: MINIO_ENDPOINT}
+      target:
+        kind: Deployment
+        name: oscar
     # PVC oscar-pvc already exists in the cluster (Bound, managed-nfs-storage)
     # and storageClassName is immutable: request the one it already has.
     - patch: |-
