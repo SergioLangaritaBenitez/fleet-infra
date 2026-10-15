@@ -33,6 +33,24 @@ spec:
       target:
         kind: Deployment
         name: oscar
+    # El deploy live solo define requests (500m/512Mi); upstream añade
+    # limits inferiores (250m/256Mi) y el API lo rechaza
+    # (requests debe ser <= limits). Se eliminan los limits.
+    - patch: |-
+        apiVersion: apps/v1
+        kind: Deployment
+        metadata:
+          name: oscar
+        spec:
+          template:
+            spec:
+              containers:
+                - name: oscar
+                  resources:
+                    limits: null
+      target:
+        kind: Deployment
+        name: oscar
     # El PVC oscar-pvc ya existe en el clúster (Bound, managed-nfs-storage)
     # y storageClassName es inmutable: hay que pedir la misma que tiene.
     - patch: |-

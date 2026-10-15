@@ -21,10 +21,12 @@ spec:
     service:
       type: NodePort
     ports:
+      # NodePorts 80/443: la IP pública entra por :80/:443 (NAT).
+      # El apiserver admite el rango 80-35000 (--service-node-port-range).
       web:
-        nodePort: 30000
+        nodePort: 80
       websecure:
-        nodePort: 30043
+        nodePort: 443
     providers:
       kubernetesGateway:
         enabled: true
