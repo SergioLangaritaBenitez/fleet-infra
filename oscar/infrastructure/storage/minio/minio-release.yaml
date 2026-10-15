@@ -32,9 +32,11 @@ spec:
     persistence:
         enabled: false
     mode: standalone
-    # Credenciales gestionadas fuera de Git via Secret/minio (ns minio).
+    # Credenciales gestionadas fuera de Git via Secret/minio-root-credentials
+    # (ns minio). OJO: no usar el nombre `minio`, ese Secret lo crea/gestiona
+    # el propio chart y Helm lo borra en cada upgrade si deja de renderizarlo.
     # Ver secrets/README.md para rotación.
-    existingSecret: minio
+    existingSecret: minio-root-credentials
     # Sin usuarios extra: el job make-user del chart 4.0.7 usa
     # `mc admin policy add`, eliminado en mc modernos (falla el upgrade).
     # A la consola se accede con el root del Secret.
