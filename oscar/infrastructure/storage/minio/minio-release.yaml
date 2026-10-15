@@ -51,5 +51,5 @@ spec:
     environment:
         # Public URLs per cluster (via Secret/gateway-tls-config).
         # localhost here breaks console login from outside the cluster.
-        MINIO_BROWSER_REDIRECT_URL: https://console-${GATEWAY_HOST_BASE}
-        MINIO_SERVER_URL: https://storage-${GATEWAY_HOST_BASE}
+        MINIO_BROWSER_REDIRECT_URL: https://console-minio.${GATEWAY_HOST_BASE}
+        MINIO_SERVER_URL: https://storage.${GATEWAY_HOST_BASE}
