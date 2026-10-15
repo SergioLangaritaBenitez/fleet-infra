@@ -66,21 +66,27 @@ spec:
                 - name: oscar
                   env:
                     - name: OSCAR_USERNAME
+                      value: null
                       valueFrom:
                         secretKeyRef: {name: oscar-config, key: OSCAR_USERNAME}
                     - name: OSCAR_PASSWORD
+                      value: null
                       valueFrom:
                         secretKeyRef: {name: oscar-config, key: OSCAR_PASSWORD}
                     - name: MINIO_ACCESS_KEY
+                      value: null
                       valueFrom:
                         secretKeyRef: {name: oscar-config, key: MINIO_ACCESS_KEY}
                     - name: MINIO_SECRET_KEY
+                      value: null
                       valueFrom:
                         secretKeyRef: {name: oscar-config, key: MINIO_SECRET_KEY}
                     - name: MINIO_TLS_VERIFY
+                      value: null
                       valueFrom:
                         secretKeyRef: {name: oscar-config, key: MINIO_TLS_VERIFY}
                     - name: MINIO_ENDPOINT
+                      value: null
                       valueFrom:
                         secretKeyRef: {name: oscar-config, key: MINIO_ENDPOINT}
       target:
