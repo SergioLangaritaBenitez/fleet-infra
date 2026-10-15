@@ -14,4 +14,10 @@ spec:
   path: ./oscar/infrastructure/networking
   prune: true
   wait: true
+  # Variables por clúster (hostnames y nombres de Secrets TLS) desde
+  # Secret/gateway-tls-config en ns flux-system (fuera de Git).
+  postBuild:
+    substituteFrom:
+      - kind: Secret
+        name: gateway-tls-config
 ---

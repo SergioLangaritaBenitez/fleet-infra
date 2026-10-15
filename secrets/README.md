@@ -34,3 +34,30 @@ sudo kubectl -n minio rollout restart deploy/minio  # si aplica
 
 Si el Secret no existe, el `HelmRelease/minio` falla: créalo con el
 comando anterior antes del primer reconcile.
+
+## Gateway TLS por clúster (namespace `flux-system`)
+
+Los hostnames y los nombres de los Secrets con los certificados TLS
+varían en cada clúster, así que `oscar/infrastructure/networking/gateway.yaml`
+usa variables (`${GATEWAY_HOST_APEX}`, `${GATEWAY_HOST_BASE}`,
+`${GATEWAY_TLS_APEX}`, `${GATEWAY_TLS_WILDCARD}`) que Flux sustituye
+desde el `Secret/gateway-tls-config` (vía `postBuild.substituteFrom`
+en `oscar/environment/devel/networking.yaml`).
+
+Crear por clúster (ejemplo con los nombres de `my_cluster`):
+
+```bash
+ssh my_cluster "sudo kubectl -n flux-system create secret generic gateway-tls-config \
+  --from-literal=GATEWAY_HOST_APEX=mystifying-lederberg8.im.grycap.net \
+  --from-literal=GATEWAY_HOST_BASE=mystifying-lederberg8.im.grycap.net \
+  --from-literal=GATEWAY_TLS_APEX=mystifying-lederberg8.im.grycap.net-tls \
+  --from-literal=GATEWAY_TLS_WILDCARD=wildcard-mystifying-lederberg8.im.grycap.net-tls \
+  --dry-run=client -o yaml | sudo kubectl apply -f -"
+```
+
+Los Secrets TLS referenciados deben existir en el namespace del
+Gateway (`traefik`): normalmente los crea cert-manager con objetos
+`Certificate` (también fuera de Git, uno por clúster).
+
+Si el Secret `gateway-tls-config` no existe, el
+`Kustomization/networking` falla con variable indefinida (fail-fast).
