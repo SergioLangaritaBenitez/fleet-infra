@@ -14,7 +14,7 @@ spec:
   timeout: 1m
   postBuild:
     substitute:
-      OSCAR_IMAGE: "ghcr.io/grycap/oscar:4.1.2" # {"$imagepolicy": "flux-system:oscar"}
+      OSCAR_IMAGE: "ghcr.io/grycap/oscar:4.2.0" # {"$imagepolicy": "flux-system:oscar"}
   patches:
     - patch: |-
         apiVersion: apps/v1
