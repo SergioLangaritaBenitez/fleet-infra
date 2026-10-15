@@ -35,6 +35,10 @@ spec:
     # Credenciales gestionadas fuera de Git via Secret/minio (ns minio).
     # Ver secrets/README.md para rotación.
     existingSecret: minio
+    # Sin usuarios extra: el job make-user del chart 4.0.7 usa
+    # `mc admin policy add`, eliminado en mc modernos (falla el upgrade).
+    # A la consola se accede con el root del Secret.
+    users: []
     service:
         type: NodePort
         nodePort: 30300
