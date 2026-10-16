@@ -19,14 +19,16 @@ spec:
       - kind: Secret
         name: gateway-tls-config
   patches:
-    # Todas las env vars via envFrom + override por clave de los 7 literales
-    # de upstream (oscar-deployment.yaml), para que no tapen al envFrom
-    # (env explícito gana a envFrom):
+    # Todas las env vars llegan SOLO via envFrom:
     # - ConfigMap/oscar-env (configmap.yaml de esta carpeta, en Git)
     # - Secret/oscar-credentials (secret.example.yaml como plantilla,
     #   creado a mano fuera de Git)
-    # NOTA: sin patchesJson6902 porque el CRD de Kustomization del clúster
-    # no declara ese campo (solo strategic merge).
+    # Los 7 literales de upstream (oscar-deployment.yaml) se borran con
+    # $patch: delete para que no tapen al envFrom (env explícito gana a
+    # envFrom). NOTA: en `describe` seguirán viéndose (resueltas desde
+    # CM/Secret con valores planos); ocultarlas exigiría cambiar OSCAR
+    # para leer de ficheros. Sin patchesJson6902 porque el CRD de
+    # Kustomization del clúster no declara ese campo (solo strategic merge).
     - patch: |-
         apiVersion: apps/v1
         kind: Deployment
@@ -45,33 +47,19 @@ spec:
                         name: oscar-credentials
                   env:
                     - name: OSCAR_USERNAME
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-credentials, key: OSCAR_USERNAME}
+                      $patch: delete
                     - name: OSCAR_PASSWORD
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-credentials, key: OSCAR_PASSWORD}
+                      $patch: delete
                     - name: MINIO_ACCESS_KEY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-credentials, key: MINIO_ACCESS_KEY}
+                      $patch: delete
                     - name: MINIO_SECRET_KEY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-credentials, key: MINIO_SECRET_KEY}
+                      $patch: delete
                     - name: MINIO_TLS_VERIFY
-                      value: null
-                      valueFrom:
-                        configMapKeyRef: {name: oscar-env, key: MINIO_TLS_VERIFY}
+                      $patch: delete
                     - name: MINIO_ENDPOINT
-                      value: null
-                      valueFrom:
-                        configMapKeyRef: {name: oscar-env, key: MINIO_ENDPOINT}
+                      $patch: delete
                     - name: SERVERLESS_BACKEND
-                      value: null
-                      valueFrom:
-                        configMapKeyRef: {name: oscar-env, key: SERVERLESS_BACKEND}
+                      $patch: delete
       target:
         kind: Deployment
         name: oscar
