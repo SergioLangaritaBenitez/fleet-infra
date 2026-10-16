@@ -35,7 +35,26 @@ CLUSTER_SSH="ssh my_cluster"
 # usually issued by cert-manager Certificate objects (also per cluster).
 
 # ---------------------------------------------------------------------------
-# 3. SOPS age key (namespace: flux-system)
+# 4. OSCAR app env (namespace: oscar)
+#    ConfigMap/oscar-env lo aplica Flux (oscar/infrastructure/oscar-config).
+#    Este Secret es MANUAL, fuera de Git. Sin él el Pod no arranca.
+#    Claves sensibles: OSCAR_USERNAME, OSCAR_PASSWORD, MINIO_ACCESS_KEY,
+#    MINIO_SECRET_KEY, OIDC_CLIENT_ID, OIDC_CLIENT_SECRET.
+#    MINIO_* deben coincidir con minio-root-credentials.
+#    Alternativa: --from-env-file=secrets/oscar-credentials.env
+#    (copiar de secrets/oscar-credentials.env.example, nunca commitear).
+# ---------------------------------------------------------------------------
+# $CLUSTER_SSH "$KUBECTL -n oscar create secret generic oscar-credentials \
+#   --from-literal=OSCAR_USERNAME=<oscar-user> \
+#   --from-literal=OSCAR_PASSWORD=<oscar-password> \
+#   --from-literal=MINIO_ACCESS_KEY=<minio-user> \
+#   --from-literal=MINIO_SECRET_KEY=<minio-password> \
+#   --from-literal=OIDC_CLIENT_ID= \
+#   --from-literal=OIDC_CLIENT_SECRET= \
+#   --dry-run=client -o yaml | $KUBECTL apply -f -"
+
+# ---------------------------------------------------------------------------
+# 5. SOPS age key (namespace: flux-system)
 #    Consumed by: decryption.provider=sops in Kustomizations that apply
 #    encrypted manifests. BACK UP ~/.config/sops/age/keys.txt off-cluster.
 # ---------------------------------------------------------------------------
@@ -45,7 +64,8 @@ CLUSTER_SSH="ssh my_cluster"
 #   --dry-run=client -o yaml | $KUBECTL apply -f -"
 
 # ---------------------------------------------------------------------------
-# 4. OSCAR app config (namespace: oscar, managed BY Flux via SOPS)
+# 6. OSCAR app config legacy via SOPS (NO usar: sustituido por 4+ConfigMap)
+#    Se mantiene como referencia del antiguo Secret/oscar-config.
 #    Generated with flux, encrypted with sops, committed to
 #    oscar/infrastructure/secrets/oscar-config.yaml
 # ---------------------------------------------------------------------------

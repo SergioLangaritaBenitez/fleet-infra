@@ -4,3 +4,5 @@ github_token
 secrets/*.yaml
 secrets/*.env
 !secrets/README.md
+!secrets/*.example
+!secrets/*.example.sh

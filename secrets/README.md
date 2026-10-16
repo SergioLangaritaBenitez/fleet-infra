@@ -35,6 +35,36 @@ sudo kubectl -n minio rollout restart deploy/minio  # if needed
 If the Secret does not exist, `HelmRelease/minio` fails: create it with
 the command above before the first reconcile.
 
+## OSCAR app env (namespace `oscar`)
+
+Todas las env vars del Deployment están divididas (ver
+`oscar/apps/base/oscar/`):
+
+* `ConfigMap/oscar-env` (`configmap.yaml`, en Git, aplicado por Flux).
+* `Secret/oscar-credentials` (6 claves **sensibles**) — fuera de Git,
+  creado a mano. Sin él, el Pod falla al arrancar (fail-fast).
+  Claves: `OSCAR_USERNAME`, `OSCAR_PASSWORD`, `MINIO_ACCESS_KEY`,
+  `MINIO_SECRET_KEY`, `OIDC_CLIENT_ID`, `OIDC_CLIENT_SECRET`.
+
+Crear (ejemplo):
+
+```bash
+ssh my_cluster "sudo kubectl -n oscar create secret generic oscar-credentials \
+  --from-literal=OSCAR_USERNAME=<oscar-user> \
+  --from-literal=OSCAR_PASSWORD=<oscar-password> \
+  --from-literal=MINIO_ACCESS_KEY=<minio-user> \
+  --from-literal=MINIO_SECRET_KEY=<minio-password> \
+  --from-literal=OIDC_CLIENT_ID= \
+  --from-literal=OIDC_CLIENT_SECRET= \
+  --dry-run=client -o yaml | sudo kubectl apply -f -"
+```
+
+> `MINIO_ACCESS_KEY` / `MINIO_SECRET_KEY` deben coincidir con
+> `Secret/minio-root-credentials` (ns `minio`).
+> Alternativa con fichero: copiar `secrets/oscar-credentials.env.example`
+> a `secrets/oscar-credentials.env` (gitignored) y usar `--from-env-file`.
+> El antiguo `Secret/oscar-config` de 6 claves queda sustituido por este.
+
 ## Per-cluster gateway TLS (namespace `flux-system`)
 
 Hostnames and TLS Secret names vary per cluster, so

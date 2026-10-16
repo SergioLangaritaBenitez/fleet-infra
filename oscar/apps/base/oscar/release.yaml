@@ -18,22 +18,15 @@ spec:
     substituteFrom:
       - kind: Secret
         name: gateway-tls-config
-  # Borra la lista env de upstream (7 literales con valores viejos en
-  # desustanciao/oscar@devel:deploy/yaml/oscar-deployment.yaml) para que no
-  # tapen al envFrom (env explícito gana a envFrom). Sin esto, el rollout
-  # "resucita" MINIO_ENDPOINT=http://minio.minio:9000 y admin/password.
-  patchesJson6902:
-    - target:
-        kind: Deployment
-        name: oscar
-      patch:
-        - op: remove
-          path: /spec/template/spec/containers/0/env
   patches:
-    # Todas las env vars via envFrom:
+    # Todas las env vars via envFrom + override por clave de los 7 literales
+    # de upstream (oscar-deployment.yaml), para que no tapen al envFrom
+    # (env explícito gana a envFrom):
     # - ConfigMap/oscar-env (configmap.yaml de esta carpeta, en Git)
     # - Secret/oscar-credentials (secret.example.yaml como plantilla,
     #   creado a mano fuera de Git)
+    # NOTA: sin patchesJson6902 porque el CRD de Kustomization del clúster
+    # no declara ese campo (solo strategic merge).
     - patch: |-
         apiVersion: apps/v1
         kind: Deployment
