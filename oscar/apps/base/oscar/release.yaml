@@ -43,6 +43,35 @@ spec:
                         name: oscar-env
                     - secretRef:
                         name: oscar-credentials
+                  env:
+                    - name: OSCAR_USERNAME
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-credentials, key: OSCAR_USERNAME}
+                    - name: OSCAR_PASSWORD
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-credentials, key: OSCAR_PASSWORD}
+                    - name: MINIO_ACCESS_KEY
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-credentials, key: MINIO_ACCESS_KEY}
+                    - name: MINIO_SECRET_KEY
+                      value: null
+                      valueFrom:
+                        secretKeyRef: {name: oscar-credentials, key: MINIO_SECRET_KEY}
+                    - name: MINIO_TLS_VERIFY
+                      value: null
+                      valueFrom:
+                        configMapKeyRef: {name: oscar-env, key: MINIO_TLS_VERIFY}
+                    - name: MINIO_ENDPOINT
+                      value: null
+                      valueFrom:
+                        configMapKeyRef: {name: oscar-env, key: MINIO_ENDPOINT}
+                    - name: SERVERLESS_BACKEND
+                      value: null
+                      valueFrom:
+                        configMapKeyRef: {name: oscar-env, key: SERVERLESS_BACKEND}
       target:
         kind: Deployment
         name: oscar
