@@ -7,3 +7,7 @@ resources:
   - image-repository.yaml
   - image-policy.yaml
   - image-update-automation.yaml
+  - configmap.yaml
+  # ConfigMap con las env vars no sensibles (lo aplica Flux).
+  # El Secret (secret.example.yaml) y la plantilla manual
+  # (plantilla-oscar-env.yaml) NO van aquí: el Secret se crea a mano.

@@ -19,6 +19,10 @@ spec:
       - kind: Secret
         name: gateway-tls-config
   patches:
+    # Todas las env vars via envFrom:
+    # - ConfigMap/oscar-env (configmap.yaml de esta carpeta, en Git)
+    # - Secret/oscar-credentials (secret.example.yaml como plantilla,
+    #   creado a mano fuera de Git)
     - patch: |-
         apiVersion: apps/v1
         kind: Deployment
@@ -30,9 +34,11 @@ spec:
               containers:
                 - name: oscar
                   image: ${OSCAR_IMAGE}
-                  env:
-                    - name: SERVERLESS_BACKEND
-                      value: "knative"
+                  envFrom:
+                    - configMapRef:
+                        name: oscar-env
+                    - secretRef:
+                        name: oscar-credentials
       target:
         kind: Deployment
         name: oscar
@@ -51,48 +57,6 @@ spec:
                 - name: oscar
                   resources:
                     limits: null
-      target:
-        kind: Deployment
-        name: oscar
-    # App config pinned here so upstream defaults can no longer reset it.
-    # Values come from Secret/oscar-config (ns oscar, outside Git):
-    # the live Deployment was re-owned to Flux (see secrets/README.md),
-    # so server-side apply stays conflict-free.
-    - patch: |-
-        apiVersion: apps/v1
-        kind: Deployment
-        metadata:
-          name: oscar
-        spec:
-          template:
-            spec:
-              containers:
-                - name: oscar
-                  env:
-                    - name: OSCAR_USERNAME
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: OSCAR_USERNAME}
-                    - name: OSCAR_PASSWORD
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: OSCAR_PASSWORD}
-                    - name: MINIO_ACCESS_KEY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_ACCESS_KEY}
-                    - name: MINIO_SECRET_KEY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_SECRET_KEY}
-                    - name: MINIO_TLS_VERIFY
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_TLS_VERIFY}
-                    - name: MINIO_ENDPOINT
-                      value: null
-                      valueFrom:
-                        secretKeyRef: {name: oscar-config, key: MINIO_ENDPOINT}
       target:
         kind: Deployment
         name: oscar

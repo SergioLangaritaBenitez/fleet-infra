@@ -1,0 +1,104 @@
+---
+# ConfigMap con las variables NO sensibles de OSCAR (75 claves).
+# Valores del Deployment vivo del clúster (2026-10-16).
+# Fuente código: pkg/types/config.go (configVars) de grycap/oscar.
+# Lo aplica Flux (ver kustomization.yaml de esta carpeta).
+# Las 6 sensibles viven en Secret/oscar-credentials (secret.example.yaml),
+# creado a mano fuera de Git. El Deployment consume ambos via envFrom
+# (ver release.yaml).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: oscar-env
+  namespace: oscar
+data:
+  # --- Object storage (no sensible) ---
+  MINIO_REGION: "us-east-1"
+  # En el vivo viene de Secret/oscar-config. Valor habitual: false.
+  MINIO_TLS_VERIFY: "false"
+  # Fijar por clúster.
+  MINIO_ENDPOINT: "https://storage.mystifying-lederberg8.im.grycap.net"
+  OBJECT_STORAGE_TYPE: "minio"
+  # --- Identidad del despliegue ---
+  OSCAR_NAME: "oscar"
+  OSCAR_NAMESPACE: "oscar"
+  OSCAR_SERVICES_NAMESPACE: "oscar-svc"
+  OSCAR_CONTROLLER_SERVICE_ACCOUNT: "oscar-sa"
+  OSCAR_SERVICE_PORT: "8080"
+  # --- Backend serverless ---
+  SERVERLESS_BACKEND: "knative"
+  # --- Legacy OpenFaaS (no está en config.go actual, se conserva del vivo) ---
+  OPENFAAS_NAMESPACE: "openfaas"
+  OPENFAAS_PORT: "8080"
+  OPENFAAS_BASIC_AUTH_SECRET: "basic-auth"
+  OPENFAAS_PROMETHEUS_PORT: "9090"
+  OPENFAAS_SCALER_ENABLE: "false"
+  OPENFAAS_SCALER_INTERVAL: "2m"
+  OPENFAAS_SCALER_INACTIVITY_DURATION: "10m"
+  # --- Watchdog / timeouts HTTP ---
+  WATCHDOG_MAX_INFLIGHT: "1"
+  WATCHDOG_WRITE_DEBUG: "true"
+  WATCHDOG_EXEC_TIMEOUT: "0"
+  WATCHDOG_READ_TIMEOUT: "300"
+  WATCHDOG_WRITE_TIMEOUT: "300"
+  WATCHDOG_HEALTHCHECK_INTERVAL: "5"
+  READ_TIMEOUT: "300"
+  WRITE_TIMEOUT: "300"
+  # --- Scheduling: Yunikorn / Kueue ---
+  YUNIKORN_ENABLE: "false"
+  YUNIKORN_NAMESPACE: "yunikorn"
+  YUNIKORN_CONFIGMAP: "yunikorn-configs"
+  YUNIKORN_CONFIG_FILENAME: "queues.yaml"
+  KUEUE_ENABLE: "true"
+  KUEUE_DEFAULT_CPU: "5"
+  KUEUE_DEFAULT_MEMORY: "5Gi"
+  KUEUE_DEFAULT_GPU: "0"
+  KUEUE_DEFAULT_FLAVOR: "oscar-default-flavor"
+  KUEUE_DEFAULT_EPHEMERAL_STORAGE: "5Gi"
+  # --- Volúmenes ---
+  VOLUME_ENABLE: ""
+  STORAGE_CLASS_NAME: "managed-nfs-storage"
+  VOLUME_AVAILABLE: "7Gi"
+  VOLUME_MAX: "5"
+  VOLUME_MAX_DISK: "5Gi"
+  VOLUME_MIN_DISK: "200Mi"
+  # --- ResourceManager / ReScheduler ---
+  RESOURCE_MANAGER_ENABLE: "true"
+  RESOURCE_MANAGER_INTERVAL: "15"
+  RESCHEDULER_ENABLE: "true"
+  RESCHEDULER_INTERVAL: "15"
+  RESCHEDULER_THRESHOLD: "30"
+  # --- OIDC (no sensible; client_id/secret van al Secret) ---
+  OIDC_ENABLE: "true"
+  OIDC_ISSUERS: "https://aai.egi.eu/auth/realms/egi,https://keycloak.grycap.net/realms/grycap"
+  OIDC_SUBJECT: "5e14d33ac4abc96272cc163da6a200c2e18591bfb3b0f32a4c9c867f5e938463@egi.eu"
+  OIDC_GROUPS: "/oscar-test,/oscar-staff"
+  USERS_ADMIN: ""
+  # --- Exposición de servicios ---
+  INGRESS_HOST: "mystifying-lederberg8.im.grycap.net"
+  EXPOSED_SERVICES_USE_SUBDOMAIN_ROUTE: "true"
+  EXPOSED_SERVICES_ROUTE_KIND: "httproute"
+  HTTPROUTE_GATEWAY_NAME: "traefik-gateway"
+  HTTPROUTE_GATEWAY_NAMESPACE: "traefik"
+  SUPERVISOR_KIT_IMAGE: "docker://ghcr.io/grycap/faas-supervisor-kit:1.0.0"
+  INGRESS_SERVICES_CORS_ALLOWED_ORIGINS: "https://dashboard.oscar.grycap.net,https://dashboard-devel.oscar.grycap.net,https://dashboard-demo.oscar.grycap.net,http://oscar.oscar.svc.cluster.local,http://host.docker.internal,http://localhost,http://localhost:5173"
+  INGRESS_SERVICES_CORS_ALLOWED_METHODS: "GET, PUT, POST, DELETE, PATCH, HEAD"
+  INGRESS_SERVICES_CORS_ALLOWED_HEADERS: "Authorization, Content-Type"
+  ADDITIONAL_CONFIG_PATH: "config.yaml"
+  # --- Jobs ---
+  TTL_JOB: "2592000"
+  JOB_LISTING_LIMIT: "70"
+  # --- KServe / observabilidad ---
+  KSERVE_ENABLE: "false"
+  PROMETHEUS_URL: "http://prometheus-operator-kube-p-prometheus.monitoring.svc.cluster.local:90900"
+  PROMETHEUS_CPU_QUERY: "sum(increase(container_cpu_usage_seconds_total{namespace=~\"{{services_namespace}}.*\",pod=~\"{{service}}.*\"}[{{range}}])) / 3600"
+  PROMETHEUS_GPU_QUERY: "sum(increase(container_gpu_usage_seconds_total{namespace=~\"{{services_namespace}}.*\",pod=~\"{{service}}.*\"}[{{range}}])) / 3600"
+  LOKI_URL: "http://loki.monitoring:3100"
+  LOKI_QUERY: "{namespace=\"oscar\"}"
+  LOKI_EXPOSED_QUERY: ""
+  LOKI_EXPOSED_NAMESPACE: "traefik"
+  LOKI_EXPOSED_APP: "traefik"
+  # --- Cuotas MinIO ---
+  MINIO_QUOTA_ENABLED: "true"
+  MINIO_QUOTA_BUCKETS: "5"
+  MINIO_QUOTA_STORAGE: "5Gi"
