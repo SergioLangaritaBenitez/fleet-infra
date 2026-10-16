@@ -14,7 +14,7 @@ spec:
   timeout: 1m
   postBuild:
     substitute:
-      OSCAR_IMAGE: "ghcr.io/grycap/oscar:4.2.0" # {"$imagepolicy": "flux-system:oscar"}
+      OSCAR_IMAGE: "ghcr.io/grycap/oscar:4.2.1" # {"$imagepolicy": "flux-system:oscar"}
     substituteFrom:
       - kind: Secret
         name: gateway-tls-config
